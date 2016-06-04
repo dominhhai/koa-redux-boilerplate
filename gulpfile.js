@@ -10,11 +10,11 @@ var path = require('path')
 var client = {
   js: {
     src: 'client/js',
-    dest: 'public/js'
+    dest: 'public/js.min'
   },
   css: {
     src: 'client/css',
-    dest: 'public/css'
+    dest: 'public/css.min'
   }
 }
 
@@ -23,8 +23,8 @@ gulp.task('default', ['jsmin', 'cssmin', 'start'])
 gulp.task('start', function () {
   nodemon({
     script: 'bin/babel',
-    ext: 'js css ejs',
-    ignore: ['public', 'logs'],
+    ext: 'js',
+    ignore: ['view', 'public', 'logs'],
     tasks: function (files) {
       var tasks = []
       files.forEach(function (file) {

@@ -1,14 +1,18 @@
 import Koa from 'koa'
 import koaRouter from 'koa-router'
-import views from 'koa-views'
 import json from 'koa-json'
 import onerror from 'koa-onerror'
 import bodyparser from 'koa-bodyparser'
 import serve from 'koa-static'
+import react from 'koa-react-view'
 import path from 'path'
 import log4js from 'koa-log4'
 import index from './routes/index'
 import users from './routes/users'
+
+import webpack from 'webpack'
+import { devMiddleware, hotMiddleware } from 'koa-webpack-middleware'
+import webpackConfig from './webpack.config'
 
 const app = new Koa()
 const router = koaRouter()
@@ -19,14 +23,22 @@ app.use(bodyparser())
 app.use(json())
 app.use(log4js.koaLogger(log4js.getLogger('http'), { level: 'auto' }))
 app.use(serve(path.join(__dirname, 'public')))
+react(app, {
+  views: path.join(__dirname, 'views', 'server'),
+  extname: 'js'
+})
+
+// Use this middleware to set up hot module reloading via webpack.
+const compiler = webpack(webpackConfig)
+app.use(devMiddleware(compiler, {
+  noInfo: true,
+  inline: true,
+  publicPath: webpackConfig.output.publicPath
+}))
+app.use(hotMiddleware(compiler))
 
 // handle error
 onerror(app)
-
-// setup view
-app.use(views(path.join(__dirname, 'views'), {
-  extension: 'ejs'
-}))
 
 // logger
 app.use(async (ctx, next) => {

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 class App extends Component {
   render() {
-  	return <p>abcaaa</p>
+  	return <p>Demo React</p>
   }
 }
 
