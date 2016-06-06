@@ -14,7 +14,7 @@ module.exports = {
     publicPath: '/js/'
   },
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['', '.js', '.jsx', '.styl']
   },
   module: {
     loaders: [

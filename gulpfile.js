@@ -24,7 +24,7 @@ gulp.task('start', function () {
   nodemon({
     script: 'bin/babel',
     ext: 'js',
-    ignore: ['view', 'public', 'logs'],
+    ignore: ['views', 'public', 'logs'],
     tasks: function (files) {
       var tasks = []
       files.forEach(function (file) {
