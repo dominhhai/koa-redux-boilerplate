@@ -1,5 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
+var ExtractTextPlugin = require("extract-text-webpack-plugin")
 
 module.exports = {
   devtool: 'inline-source-map',
@@ -14,24 +15,35 @@ module.exports = {
     publicPath: '/js/'
   },
   resolve: {
-    extensions: ['', '.js', '.jsx', '.styl']
+    extensions: ['', '.js', '.jsx', '.css', '.styl']
   },
   module: {
     loaders: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         loader: 'babel',
         exclude: /node_modules/,
         include: __dirname,
         query: {
           presets: ['es2015', 'react-hmre']
         }
+      },
+      {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader'),
+        exclude: /node_modules/
+      },
+      {
+        test: /\.styl$/,
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader!stylus-loader'),
+        exclude: /node_modules/
       }
     ]
   },
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
+    new ExtractTextPlugin('[name].css')
     // new webpack.optimize.UglifyJsPlugin({
     //   compress: {
     //     warnings: false
